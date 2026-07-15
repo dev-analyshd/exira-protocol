@@ -1,0 +1,1 @@
+- [EXIRA artifact system workaround](exira-artifact-workaround.md) — createArtifact env-var step fails system-wide; use configureWorkflow instead with explicit PORT/BASE_PATH in command.
