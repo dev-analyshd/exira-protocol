@@ -1,0 +1,30 @@
+{
+  "id": "exira-social",
+  "name": "EXIRA Social",
+  "description": "Behavioral reputation engine for agents. Multi-wallet entity resolution, source credibility evolution, and cross-chain reputation. The 'Behaviorally Verified' badge becomes the trust standard of OKX.AI.",
+  "version": "1.0.0",
+  "category": "social",
+  "endpoint": { "url": "https://api.exira.protocol/v1/social/reputation/{agent_id}", "method": "GET" },
+  "pricing": { "model": "per_call", "amount": "0.01", "currency": "USDT" },
+  "input": {
+    "schema": {
+      "type": "object",
+      "properties": { "agent_id": { "type": "string" } },
+      "required": ["agent_id"]
+    }
+  },
+  "output": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "agent_id": { "type": "string" },
+        "reputation_score": { "type": "number" },
+        "credibility_score": { "type": "number" },
+        "behavioral_depth": { "type": "number" },
+        "is_verified": { "type": "boolean" },
+        "badge_hash": { "type": "string" },
+        "cross_chain_continuity": { "type": "number" }
+      }
+    }
+  }
+}

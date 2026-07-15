@@ -2,14 +2,33 @@ openapi: 3.1.0
 info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
-  version: 0.1.0
-  description: API specification
+  version: 1.0.0
+  description: EXIRA Protocol API - 7-pillar behavioral truth services
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: finance
+    description: Behavioral trading signals
+  - name: verify
+    description: Agent security audits
+  - name: bridge
+    description: Cross-chain routing
+  - name: guard
+    description: ZK compliance credentials
+  - name: social
+    description: Reputation engine
+  - name: learn
+    description: Autonomous skill acquisition
+  - name: sense
+    description: Privacy-preserving credentials
+  - name: agents
+    description: Agent registry
+  - name: dashboard
+    description: Real-time coherence metrics
+
 paths:
   /healthz:
     get:
@@ -24,6 +43,273 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /v1/finance:
+    post:
+      operationId: getFinanceSignal
+      tags: [finance]
+      summary: Request behavioral trading signal
+      description: Returns a coherence-gated trading signal for the given asset pair
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FinanceSignalInput"
+      responses:
+        "200":
+          description: Trading signal
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FinanceSignal"
+
+  /v1/verify/{agentId}:
+    post:
+      operationId: auditAgent
+      tags: [verify]
+      summary: Audit agent for manipulation fingerprints
+      parameters:
+        - name: agentId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuditInput"
+      responses:
+        "200":
+          description: Audit report
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuditReport"
+
+  /v1/bridge/route:
+    post:
+      operationId: computeBridgeRoute
+      tags: [bridge]
+      summary: Compute optimal cross-chain route
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BridgeInput"
+      responses:
+        "200":
+          description: Ranked bridge routes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BridgeRoute"
+
+  /v1/guard/credential:
+    post:
+      operationId: issueCredential
+      tags: [guard]
+      summary: Issue ZK compliance credential
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CredentialInput"
+      responses:
+        "201":
+          description: ZK credential issued
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZKCredential"
+
+  /v1/social/reputation/{agentId}:
+    get:
+      operationId: getReputation
+      tags: [social]
+      summary: Get agent reputation
+      parameters:
+        - name: agentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Agent reputation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReputationProfile"
+
+  /v1/learn/skills:
+    get:
+      operationId: listSkills
+      tags: [learn]
+      summary: List autonomous skills
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: complexity
+          in: query
+          schema:
+            type: string
+            enum: [simple, medium, complex]
+      responses:
+        "200":
+          description: Skill catalog
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SkillCatalog"
+
+  /v1/sense/prove:
+    post:
+      operationId: generateProof
+      tags: [sense]
+      summary: Generate ZK behavioral proof
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProofInput"
+      responses:
+        "200":
+          description: ZK proof generated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZKProof"
+
+  /v1/agents:
+    get:
+      operationId: listAgents
+      tags: [agents]
+      summary: List registered agents
+      parameters:
+        - name: verified
+          in: query
+          schema:
+            type: boolean
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        "200":
+          description: Agent list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AgentProfile"
+
+  /v1/agents/register:
+    post:
+      operationId: registerAgent
+      tags: [agents]
+      summary: Register new agent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AgentInput"
+      responses:
+        "201":
+          description: Agent registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AgentProfile"
+
+  /v1/agents/{agentId}:
+    get:
+      operationId: getAgent
+      tags: [agents]
+      summary: Get agent profile
+      parameters:
+        - name: agentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Agent profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AgentProfile"
+        "404":
+          description: Agent not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /v1/dashboard/coherence:
+    get:
+      operationId: getCoherenceMetrics
+      tags: [dashboard]
+      summary: Get real-time coherence metrics
+      responses:
+        "200":
+          description: Coherence metrics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CoherenceMetrics"
+
+  /v1/dashboard/pillars:
+    get:
+      operationId: getPillarStatus
+      tags: [dashboard]
+      summary: Get 7-pillar status
+      responses:
+        "200":
+          description: Pillar status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PillarStatus"
+
+  /v1/dashboard/signals:
+    get:
+      operationId: getRecentSignals
+      tags: [dashboard]
+      summary: Get recent signal feed
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: signalType
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Recent signals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SignalEvent"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +320,361 @@ components:
       required:
         - status
 
+    FinanceSignalInput:
+      type: object
+      required: [assetPair]
+      properties:
+        assetPair:
+          type: string
+          description: "Trading pair e.g. BTC-USDT"
+        timeframe:
+          type: string
+          enum: ["1h", "4h", "1d", "1w"]
+          default: "1h"
+        riskProfile:
+          type: string
+          enum: [conservative, balanced, aggressive]
+          default: balanced
+
+    FinanceSignal:
+      type: object
+      required: [signalId, direction, confidence, coherence, threshold, manipulationRisk, timestamp]
+      properties:
+        signalId:
+          type: string
+        direction:
+          type: string
+          enum: [Long, Short, Neutral, Hedge, Silence]
+        confidence:
+          type: number
+        ci95Lower:
+          type: number
+        ci95Upper:
+          type: number
+        coherence:
+          type: number
+        threshold:
+          type: number
+        strategy:
+          type: string
+        manipulationRisk:
+          type: number
+        timestamp:
+          type: integer
+
+    AuditInput:
+      type: object
+      required: [auditDepth]
+      properties:
+        auditDepth:
+          type: integer
+          minimum: 100
+          maximum: 10000
+          default: 1000
+
+    ManipulationFingerprint:
+      type: object
+      required: [type, confidence, severity]
+      properties:
+        type:
+          type: string
+          enum: [WashTrading, CoordinatedPump, OracleAttackAttempt, SybilLiquidity, GovernanceCapture, MevExtractionSustained, FakeVolumeProtocol]
+        confidence:
+          type: number
+        severity:
+          type: string
+          enum: [Low, Medium, High, Critical]
+        evidenceBlocks:
+          type: array
+          items:
+            type: string
+
+    AuditReport:
+      type: object
+      required: [auditId, targetAgentId, overallRisk, fingerprintsDetected, behavioralDepth, credibilityScore, badgeEligible]
+      properties:
+        auditId:
+          type: string
+        targetAgentId:
+          type: string
+        overallRisk:
+          type: number
+        fingerprintsDetected:
+          type: array
+          items:
+            $ref: "#/components/schemas/ManipulationFingerprint"
+        behavioralDepth:
+          type: number
+        credibilityScore:
+          type: number
+        badgeEligible:
+          type: boolean
+        badgeHash:
+          type: ["string", "null"]
+
+    BridgeInput:
+      type: object
+      required: [assetIn, assetOut, amount, sourceChain, targetChain]
+      properties:
+        assetIn:
+          type: string
+        assetOut:
+          type: string
+        amount:
+          type: string
+        sourceChain:
+          type: integer
+        targetChain:
+          type: integer
+        deadline:
+          type: integer
+        maxGasUsd:
+          type: string
+        privacyMode:
+          type: string
+          enum: [Public, ZkCredential, Invisible]
+          default: Public
+
+    BridgeRoute:
+      type: object
+      required: [routeId, routeType, sourceChain, targetChain, btcpScore, estimatedGas, estimatedTime, nlScore, beoContruinity, ccCoherence]
+      properties:
+        routeId:
+          type: string
+        routeType:
+          type: string
+          enum: [SingleChain, Split, Netting, Parallel, MultiHop, Deferred, Bitp]
+        sourceChain:
+          type: integer
+        targetChain:
+          type: integer
+        btcpScore:
+          type: number
+        estimatedGas:
+          type: string
+        estimatedTime:
+          type: integer
+        nlScore:
+          type: number
+        beoContruinity:
+          type: number
+        ccCoherence:
+          type: number
+
+    CredentialInput:
+      type: object
+      required: [credentialType]
+      properties:
+        credentialType:
+          type: string
+          enum: [kyc, aml, sanctions, travel_rule]
+        jurisdiction:
+          type: string
+        disclosureHash:
+          type: string
+
+    ZKCredential:
+      type: object
+      required: [credentialId, zkProof, verifierAddress, expiresAt]
+      properties:
+        credentialId:
+          type: string
+        zkProof:
+          type: string
+        verifierAddress:
+          type: string
+        expiresAt:
+          type: integer
+
+    ReputationProfile:
+      type: object
+      required: [agentId, reputationScore, credibilityScore, behavioralDepth, isVerified]
+      properties:
+        agentId:
+          type: string
+        reputationScore:
+          type: number
+        credibilityScore:
+          type: number
+        behavioralDepth:
+          type: number
+        isVerified:
+          type: boolean
+        badgeHash:
+          type: ["string", "null"]
+        crossChainContinuity:
+          type: number
+
+    SkillEntry:
+      type: object
+      required: [skillId, skillName, description, complexity, iqScore, isAvailable]
+      properties:
+        skillId:
+          type: string
+        skillName:
+          type: string
+        description:
+          type: string
+        complexity:
+          type: string
+          enum: [simple, medium, complex]
+        iqScore:
+          type: number
+        isAvailable:
+          type: boolean
+
+    SkillCatalog:
+      type: object
+      required: [skills, totalCount]
+      properties:
+        skills:
+          type: array
+          items:
+            $ref: "#/components/schemas/SkillEntry"
+        totalCount:
+          type: integer
+
+    ProofInput:
+      type: object
+      required: [propertyType]
+      properties:
+        propertyType:
+          type: string
+          enum: [task_count, satisfaction_rate, dispute_free, manipulation_free]
+        threshold:
+          type: number
+
+    ZKProof:
+      type: object
+      required: [proofId, zkProof, publicCommitment, isValid]
+      properties:
+        proofId:
+          type: string
+        zkProof:
+          type: string
+        publicCommitment:
+          type: string
+        isValid:
+          type: boolean
+
+    AgentInput:
+      type: object
+      required: [agentId, genomicKey]
+      properties:
+        agentId:
+          type: string
+        genomicKey:
+          type: string
+        ownerAddress:
+          type: string
+
+    AgentProfile:
+      type: object
+      required: [agentId, ownerAddress, registrationTime, behavioralDepth, credibilityScore, reputationScore, isVerified]
+      properties:
+        agentId:
+          type: string
+        ownerAddress:
+          type: string
+        registrationTime:
+          type: string
+          format: date-time
+        behavioralDepth:
+          type: number
+        credibilityScore:
+          type: number
+        reputationScore:
+          type: number
+        isVerified:
+          type: boolean
+        genomicKey:
+          type: ["string", "null"]
+
+    CoherenceMetrics:
+      type: object
+      required: [overallCoherence, threshold, physicalPlane, mentalPlane, spiritualPlane, consciousPlane, animaPlane, history]
+      properties:
+        overallCoherence:
+          type: number
+        threshold:
+          type: number
+        physicalPlane:
+          type: number
+        mentalPlane:
+          type: number
+        spiritualPlane:
+          type: number
+        consciousPlane:
+          type: number
+        animaPlane:
+          type: number
+        history:
+          type: array
+          items:
+            $ref: "#/components/schemas/CoherencePoint"
+
+    CoherencePoint:
+      type: object
+      required: [timestamp, value]
+      properties:
+        timestamp:
+          type: string
+        value:
+          type: number
+
+    PillarInfo:
+      type: object
+      required: [name, status, requestsToday, avgResponseMs, uptime]
+      properties:
+        name:
+          type: string
+        status:
+          type: string
+          enum: [active, degraded, offline]
+        requestsToday:
+          type: integer
+        avgResponseMs:
+          type: number
+        uptime:
+          type: number
+
+    PillarStatus:
+      type: object
+      required: [pillars, totalRequestsToday, systemCoherence]
+      properties:
+        pillars:
+          type: array
+          items:
+            $ref: "#/components/schemas/PillarInfo"
+        totalRequestsToday:
+          type: integer
+        systemCoherence:
+          type: number
+
+    SignalEvent:
+      type: object
+      required: [signalId, signalType, entityId, coherence, threshold, timestamp]
+      properties:
+        signalId:
+          type: string
+        signalType:
+          type: string
+        entityId:
+          type: string
+        coherence:
+          type: number
+        threshold:
+          type: number
+        margin:
+          type: number
+        direction:
+          type: ["string", "null"]
+        timestamp:
+          type: string
+
+    ErrorResponse:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string

@@ -1,0 +1,98 @@
+{
+  "id": "exira-finance",
+  "name": "EXIRA Finance",
+  "description": "Behavioral trading signals with coherence-gated execution. EXIRA Finance only emits signals when five planes of behavioral evidence cohere to a threshold. 87% silence rate means we only speak when we know.",
+  "version": "1.0.0",
+  "category": "finance",
+  "icon": "https://exira.protocol/assets/skills/finance.png",
+  "endpoint": {
+    "url": "https://api.exira.protocol/v1/finance",
+    "method": "POST",
+    "headers": {
+      "Content-Type": "application/json",
+      "X-EXIRA-Version": "1.0.0"
+    }
+  },
+  "pricing": {
+    "model": "per_call",
+    "amount": "0.001",
+    "currency": "USDT",
+    "min_amount": "0.001",
+    "max_amount": "0.001"
+  },
+  "input": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "asset_pair": {
+          "type": "string",
+          "description": "Trading pair (e.g., 'BTC-USDT', 'ETH-USDC')",
+          "examples": ["BTC-USDT", "ETH-USDC", "SOL-USDT"]
+        },
+        "timeframe": {
+          "type": "string",
+          "enum": ["1h", "4h", "1d", "1w"],
+          "default": "1h",
+          "description": "Analysis timeframe"
+        },
+        "risk_profile": {
+          "type": "string",
+          "enum": ["conservative", "balanced", "aggressive"],
+          "default": "balanced",
+          "description": "Risk tolerance for signal generation"
+        }
+      },
+      "required": ["asset_pair"]
+    }
+  },
+  "output": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "signal_id": { "type": "string" },
+        "direction": {
+          "type": "string",
+          "enum": ["Long", "Short", "Neutral", "Hedge", "Silence"]
+        },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "ci95_lower": { "type": "number" },
+        "ci95_upper": { "type": "number" },
+        "coherence": { "type": "number" },
+        "threshold": { "type": "number" },
+        "strategy": { "type": "string" },
+        "manipulation_risk": { "type": "number", "minimum": 0, "maximum": 1 },
+        "timestamp": { "type": "integer" }
+      }
+    }
+  },
+  "examples": [
+    {
+      "input": { "asset_pair": "BTC-USDT", "timeframe": "4h", "risk_profile": "balanced" },
+      "output": {
+        "signal_id": "0x7a3f...9e2b",
+        "direction": "Long",
+        "confidence": 0.847,
+        "ci95_lower": 0.823,
+        "ci95_upper": 0.871,
+        "coherence": 0.847,
+        "threshold": 0.599,
+        "strategy": "MomentumMeanReversion_v3",
+        "manipulation_risk": 0.02,
+        "timestamp": 1752604800000
+      }
+    },
+    {
+      "input": { "asset_pair": "ETH-USDC", "timeframe": "1h" },
+      "output": {
+        "signal_id": "0x9b2c...4f1a",
+        "direction": "Silence",
+        "confidence": 0,
+        "coherence": 0.423,
+        "threshold": 0.612,
+        "strategy": "NONE",
+        "manipulation_risk": 0.15,
+        "timestamp": 1752604800000
+      }
+    }
+  ]
+}

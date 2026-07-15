@@ -1,0 +1,43 @@
+{
+  "id": "exira-verify",
+  "name": "EXIRA Verify",
+  "description": "Behavioral security audit for agents. Before you hire any agent, EXIRA reads their behavioral history and detects manipulation fingerprints. CRISPR Defense neutralizes malicious agents before escrow locks.",
+  "version": "1.0.0",
+  "category": "utility",
+  "endpoint": { "url": "https://api.exira.protocol/v1/verify/{agent_id}", "method": "POST" },
+  "pricing": { "model": "per_call", "amount": "0.50", "currency": "USDT" },
+  "input": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "agent_id": { "type": "string" },
+        "audit_depth": { "type": "integer", "minimum": 100, "maximum": 10000, "default": 1000 }
+      },
+      "required": ["agent_id"]
+    }
+  },
+  "output": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "audit_id": { "type": "string" },
+        "overall_risk": { "type": "number", "minimum": 0, "maximum": 1 },
+        "fingerprints_detected": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string" },
+              "confidence": { "type": "number" },
+              "severity": { "type": "string", "enum": ["Low", "Medium", "High", "Critical"] }
+            }
+          }
+        },
+        "behavioral_depth": { "type": "number" },
+        "credibility_score": { "type": "number" },
+        "badge_eligible": { "type": "boolean" },
+        "badge_hash": { "type": "string" }
+      }
+    }
+  }
+}

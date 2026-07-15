@@ -1,0 +1,31 @@
+{
+  "id": "exira-guard",
+  "name": "EXIRA Guard",
+  "description": "ZK-verifiable compliance credentials. Prove KYC/AML/sanctions clearance without revealing identity. Chameleon Protocol auto-adapts to regulatory changes. Privacy + compliance simultaneously.",
+  "version": "1.0.0",
+  "category": "utility",
+  "endpoint": { "url": "https://api.exira.protocol/v1/guard/credential", "method": "POST" },
+  "pricing": { "model": "per_call", "amount": "2.00", "currency": "USDT" },
+  "input": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "credential_type": { "type": "string", "enum": ["kyc", "aml", "sanctions", "travel_rule"] },
+        "jurisdiction": { "type": "string" },
+        "disclosure_hash": { "type": "string" }
+      },
+      "required": ["credential_type"]
+    }
+  },
+  "output": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "credential_id": { "type": "string" },
+        "zk_proof": { "type": "string" },
+        "verifier_address": { "type": "string" },
+        "expires_at": { "type": "integer" }
+      }
+    }
+  }
+}

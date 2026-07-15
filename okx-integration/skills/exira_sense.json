@@ -1,0 +1,33 @@
+{
+  "id": "exira-sense",
+  "name": "EXIRA Sense",
+  "description": "Privacy-preserving behavioral credentials. Prove properties about yourself without revealing data. 'I have completed 100+ tasks with 98% satisfaction' — proven via ZK, not claimed.",
+  "version": "1.0.0",
+  "category": "lifestyle",
+  "endpoint": { "url": "https://api.exira.protocol/v1/sense/prove", "method": "POST" },
+  "pricing": { "model": "per_call", "amount": "1.00", "currency": "USDT" },
+  "input": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "property_type": {
+          "type": "string",
+          "enum": ["task_count", "satisfaction_rate", "dispute_free", "manipulation_free"]
+        },
+        "threshold": { "type": "number" }
+      },
+      "required": ["property_type"]
+    }
+  },
+  "output": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "proof_id": { "type": "string" },
+        "zk_proof": { "type": "string" },
+        "public_commitment": { "type": "string" },
+        "is_valid": { "type": "boolean" }
+      }
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "id": "exira-learn",
+  "name": "EXIRA Learn",
+  "description": "Autonomous skill acquisition agent. EXIRA Learn observes the marketplace, detects new skill demands, trains itself, and lists new services. The cathedral builds itself.",
+  "version": "1.0.0",
+  "category": "creative",
+  "endpoint": { "url": "https://api.exira.protocol/v1/learn/skills", "method": "GET" },
+  "pricing": { "model": "per_call", "amount": "5.00", "currency": "USDT" },
+  "input": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "category": { "type": "string" },
+        "complexity": { "type": "string", "enum": ["simple", "medium", "complex"] }
+      }
+    }
+  },
+  "output": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "skills": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "skill_id": { "type": "string" },
+              "skill_name": { "type": "string" },
+              "description": { "type": "string" },
+              "complexity": { "type": "string" },
+              "iq_score": { "type": "number" },
+              "is_available": { "type": "boolean" }
+            }
+          }
+        },
+        "total_count": { "type": "integer" }
+      }
+    }
+  }
+}

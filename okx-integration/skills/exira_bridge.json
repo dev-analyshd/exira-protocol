@@ -1,0 +1,39 @@
+{
+  "id": "exira-bridge",
+  "name": "EXIRA Bridge",
+  "description": "Behavioral cross-chain routing without bridges. Move value between chains via intent-based routing. NETTING finds opposite intents for zero-movement settlement. Assets never leave native chains.",
+  "version": "1.0.0",
+  "category": "finance",
+  "endpoint": { "url": "https://api.exira.protocol/v1/bridge/route", "method": "POST" },
+  "pricing": { "model": "percentage", "amount": "0.1", "currency": "USDT", "min_amount": "0.01" },
+  "input": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "asset_in": { "type": "string" },
+        "asset_out": { "type": "string" },
+        "amount": { "type": "string" },
+        "source_chain": { "type": "integer" },
+        "target_chain": { "type": "integer" },
+        "deadline": { "type": "integer" },
+        "max_gas_usd": { "type": "string" }
+      },
+      "required": ["asset_in", "asset_out", "amount", "source_chain", "target_chain"]
+    }
+  },
+  "output": {
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "route_id": { "type": "string" },
+          "route_type": { "type": "string" },
+          "btcp_score": { "type": "number" },
+          "estimated_gas": { "type": "string" },
+          "estimated_time": { "type": "integer" }
+        }
+      }
+    }
+  }
+}

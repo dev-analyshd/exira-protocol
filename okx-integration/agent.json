@@ -1,0 +1,35 @@
+{
+  "name": "EXIRA",
+  "description": "The Living Behavioral Cathedral — 7 integrated truth services for the agentic economy. EXIRA provides behavioral trading signals, security audits, cross-chain routing, ZK compliance, reputation scoring, autonomous skill learning, and privacy-preserving credentials.",
+  "version": "1.0.0",
+  "author": "EXIRA Protocol",
+  "license": "CC0-1.0",
+  "homepage": "https://exira.protocol",
+  "repository": "https://github.com/exira-protocol/exira",
+  "icon": "https://exira.protocol/assets/icon-512.png",
+  "banner": "https://exira.protocol/assets/banner-1920x1080.png",
+  "categories": ["finance", "utility", "social", "lifestyle", "art"],
+  "tags": ["behavioral-truth", "zk-privacy", "cross-chain", "reputation", "security", "compliance", "autonomous-learning"],
+  "chains": [195, 196],
+  "skills": [
+    "exira-finance",
+    "exira-verify",
+    "exira-bridge",
+    "exira-guard",
+    "exira-social",
+    "exira-learn",
+    "exira-sense"
+  ],
+  "payment": {
+    "type": "x402",
+    "chain_id": 195,
+    "token": "0x...",
+    "settlement_address": "0x..."
+  },
+  "contact": {
+    "email": "builders@exira.protocol",
+    "twitter": "@EXIRAProtocol",
+    "discord": "https://discord.gg/exira",
+    "github": "https://github.com/exira-protocol"
+  }
+}

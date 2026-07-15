@@ -1,0 +1,32 @@
+{
+  "version": "1.0.0",
+  "protocol": "x402",
+  "networks": {
+    "xlayer-testnet": {
+      "chain_id": 195,
+      "rpc_url": "https://testrpc.xlayer.tech",
+      "explorer": "https://www.oklink.com/xlayer-test",
+      "tokens": [
+        { "symbol": "USDT", "address": "0x...", "decimals": 6, "is_native": false }
+      ]
+    },
+    "xlayer-mainnet": {
+      "chain_id": 196,
+      "rpc_url": "https://rpc.xlayer.tech",
+      "explorer": "https://www.oklink.com/xlayer",
+      "tokens": [
+        { "symbol": "USDT", "address": "0x...", "decimals": 6, "is_native": false }
+      ]
+    }
+  },
+  "settlement": {
+    "address": "0x...",
+    "webhook_url": "https://api.exira.protocol/webhooks/payment",
+    "webhook_secret": "${WEBHOOK_SECRET}"
+  },
+  "pricing": {
+    "default_token": "USDT",
+    "min_amount": "0.001",
+    "max_amount": "10000"
+  }
+}
