@@ -10,7 +10,15 @@ if (!process.env.DATABASE_URL) {
   );
 }
 
-export const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+// TimescaleDB and other managed PostgreSQL providers use self-signed cert chains.
+// When sslmode is present in the URL, disable certificate verification so the
+// connection succeeds without needing the provider's CA bundle.
+const sslConfig =
+  process.env.DATABASE_URL?.includes("sslmode")
+    ? { ssl: { rejectUnauthorized: false } }
+    : {};
+
+export const pool = new Pool({ connectionString: process.env.DATABASE_URL, ...sslConfig });
 export const db = drizzle(pool, { schema });
 
 export * from "./schema";

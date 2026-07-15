@@ -11,4 +11,13 @@ export default defineConfig({
   dbCredentials: {
     url: process.env.DATABASE_URL,
   },
+  tablesFilter: [
+    "exira_agents",
+    "exira_signals",
+    "audit_reports",
+    "bridge_routes",
+    "zk_credentials",
+    "skills",
+    "session",
+  ],
 });
