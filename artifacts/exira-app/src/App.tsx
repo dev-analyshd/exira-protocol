@@ -1,36 +1,47 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import NotFound from '@/pages/not-found';
 import { Route, Switch, Router as WouterRouter } from 'wouter';
+import { useEffect } from 'react';
+
+import { Shell } from './components/layout/Shell';
+
+// Pages
+import Dashboard from './pages/dashboard';
+import Finance from './pages/finance';
+import Verify from './pages/verify';
+import Bridge from './pages/bridge';
+import Agents from './pages/agents';
+import Learn from './pages/learn';
+import Guard from './pages/guard';
+import Sense from './pages/sense';
+import NotFound from './pages/not-found';
 
 const queryClient = new QueryClient();
 
-function Home() {
-  return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gray-50">
-      <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900">
-          Replit Agent is building...
-        </h1>
-        <p className="mt-2 text-sm text-gray-600">
-          Your app will appear here once it's ready.
-        </p>
-      </div>
-    </div>
-  );
-}
-
 function Router() {
   return (
-    <Switch>
-      <Route path="/" component={Home} />
-      <Route component={NotFound} />
-    </Switch>
+    <Shell>
+      <Switch>
+        <Route path="/" component={Dashboard} />
+        <Route path="/finance" component={Finance} />
+        <Route path="/verify" component={Verify} />
+        <Route path="/bridge" component={Bridge} />
+        <Route path="/agents" component={Agents} />
+        <Route path="/learn" component={Learn} />
+        <Route path="/guard" component={Guard} />
+        <Route path="/sense" component={Sense} />
+        <Route component={NotFound} />
+      </Switch>
+    </Shell>
   );
 }
 
 function App() {
+  useEffect(() => {
+    document.documentElement.classList.add('dark');
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
