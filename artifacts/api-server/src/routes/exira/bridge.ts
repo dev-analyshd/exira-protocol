@@ -1,6 +1,7 @@
 import { Router } from "express";
 import crypto from "crypto";
 import { ComputeBridgeRouteBody } from "@workspace/api-zod";
+import { db, bridgeRoutesTable } from "@workspace/db";
 
 const router = Router();
 
@@ -12,7 +13,7 @@ function computeRoutes(sourceChain: number, targetChain: number, amount: string)
 
   for (let i = 0; i < numRoutes; i++) {
     const routeType = ROUTE_TYPES[Math.floor(Math.random() * ROUTE_TYPES.length)];
-    const btcpScore = 0.6 + Math.random() * 0.39;
+    const btcpScore = Math.round((0.6 + Math.random() * 0.39) * 1000) / 1000;
     const isNetting = routeType === "Netting";
 
     routes.push({
@@ -20,7 +21,7 @@ function computeRoutes(sourceChain: number, targetChain: number, amount: string)
       routeType,
       sourceChain,
       targetChain,
-      btcpScore: Math.round(btcpScore * 1000) / 1000,
+      btcpScore,
       estimatedGas: isNetting
         ? String(Math.floor(1000 + Math.random() * 5000))
         : String(Math.floor(20000 + Math.random() * 100000)),
@@ -31,12 +32,11 @@ function computeRoutes(sourceChain: number, targetChain: number, amount: string)
     });
   }
 
-  // Sort by BTCP score descending
   routes.sort((a, b) => b.btcpScore - a.btcpScore);
   return routes;
 }
 
-router.post("/bridge/route", (req, res) => {
+router.post("/bridge/route", async (req, res) => {
   const parse = ComputeBridgeRouteBody.safeParse(req.body);
   if (!parse.success) {
     return res.status(400).json({ error: "Invalid request", details: parse.error.issues });
@@ -44,6 +44,27 @@ router.post("/bridge/route", (req, res) => {
 
   const { assetIn, assetOut, amount, sourceChain, targetChain } = parse.data;
   const routes = computeRoutes(sourceChain, targetChain, amount);
+
+  // persist best route to DB (non-blocking)
+  if (routes[0]) {
+    const best = routes[0];
+    db.insert(bridgeRoutesTable).values({
+      routeId: best.routeId,
+      entityId: `${assetIn}-${assetOut}`,
+      assetIn,
+      assetOut,
+      amount,
+      sourceChain,
+      targetChain,
+      routeType: best.routeType,
+      btcpScore: best.btcpScore,
+      estimatedGas: best.estimatedGas,
+      estimatedTime: best.estimatedTime,
+      nlScore: best.nlScore,
+      ccCoherence: best.ccCoherence,
+      status: "computed",
+    }).catch(() => {/* non-blocking */});
+  }
 
   return res.json(routes);
 });
