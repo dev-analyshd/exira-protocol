@@ -9,7 +9,7 @@ const X_LAYER_RPC = process.env.X_LAYER_RPC || "https://testrpc.xlayer.tech";
 
 const config: HardhatUserConfig = {
   solidity: {
-    version: "0.8.19",
+    version: "0.8.20",
     settings: {
       optimizer: {
         enabled: true,
@@ -23,7 +23,7 @@ const config: HardhatUserConfig = {
     },
     "xlayer-testnet": {
       url: X_LAYER_RPC,
-      chainId: 195,
+      chainId: 1952,
       accounts: [PRIVATE_KEY],
       gasPrice: "auto",
     },
@@ -59,7 +59,7 @@ const config: HardhatUserConfig = {
     ],
   },
   paths: {
-    sources: "./",
+    sources: "./src",
     tests: "./test",
     cache: "./cache",
     artifacts: "./artifacts",

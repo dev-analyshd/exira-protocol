@@ -37,7 +37,7 @@ EXIRA provides behavioral truth services across 7 integrated categories, all gat
 
 | Layer | Technology |
 |-------|-----------|
-| Smart Contracts | Solidity (Hardhat) — X Layer testnet (chainId: 195) |
+| Smart Contracts | Solidity (Hardhat) — X Layer testnet (chainId: 1952) |
 | API Server | TypeScript / Express 5 |
 | Database | PostgreSQL + Drizzle ORM |
 | Frontend | React + Vite + Recharts |
@@ -67,18 +67,37 @@ pnpm --filter @workspace/exira-dashboard run dev
 
 ## Smart Contracts
 
+### Deployed — X Layer Testnet (chainId: 1952)
+
+| Contract | Address | Explorer |
+|----------|---------|---------|
+| EXIRAOracle | `0x708193f93Fb897fbeA72e7e7D19237770F19E969` | [view](https://www.oklink.com/xlayer-test/address/0x708193f93Fb897fbeA72e7e7D19237770F19E969) |
+| EXIRARegistry | `0x6EAB7862385329BdaaD32f2b9587a66E768018Ba` | [view](https://www.oklink.com/xlayer-test/address/0x6EAB7862385329BdaaD32f2b9587a66E768018Ba) |
+| EXIRAEscrow | `0x0962f369536e9AA292109840d45C0E23ee6fB382` | [view](https://www.oklink.com/xlayer-test/address/0x0962f369536e9AA292109840d45C0E23ee6fB382) |
+| EXIRAToken | `0xAbC106D943a6Aff91A0B29f4a77E4009323d7A66` | [view](https://www.oklink.com/xlayer-test/address/0xAbC106D943a6Aff91A0B29f4a77E4009323d7A66) |
+
+Deployer: `0xdBbf66CAD621dA3Ec186D18b29a135d2A5d42d20`  
+Full deployment manifest: [`contracts/deployments/xlayer-testnet.json`](./contracts/deployments/xlayer-testnet.json)
+
+### Build & Test
+
 ```bash
 cd contracts
 npm install
 
-# Compile
+# Compile (Solidity 0.8.20 + OpenZeppelin v5)
 npx hardhat compile
 
-# Deploy to X Layer testnet
-npx hardhat run scripts/deploy.ts --network xlayer-testnet
-
-# Run tests
+# Run local tests (12 passing)
 npx hardhat test
+
+# Deploy to X Layer testnet
+PRIVATE_KEY=0x... X_LAYER_RPC=https://testrpc.xlayer.tech \
+  npx hardhat run scripts/deploy.ts --network xlayer-testnet
+
+# Run on-chain e2e verification
+PRIVATE_KEY=0x... X_LAYER_RPC=https://testrpc.xlayer.tech \
+  npx hardhat run scripts/e2e-testnet.ts --network xlayer-testnet
 ```
 
 ## OKX.AI Registration

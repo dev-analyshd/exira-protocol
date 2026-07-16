@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: CC0-1.0
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.20;
 
 interface IEXIRAOracle {
     function verifyExecution(bytes32 signalId) external view returns (bool, uint256, uint256);
